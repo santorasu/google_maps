@@ -14,7 +14,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text("Home")),
       body: GoogleMap(
+        mapType: MapType.hybrid,
         initialCameraPosition: CameraPosition(
+          zoom: 17,
           target: LatLng(23.880815840607823, 90.32470045429187),
         ),
       ),
