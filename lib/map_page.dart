@@ -76,7 +76,7 @@ class _MapPageState extends State<MapPage> {
           print("Source dragged to $endLatLng");
         },
         infoWindow: InfoWindow(
-          title: "Source Location",
+          title: "Destination Location",
           snippet: "Lat: ${_sourceLocation.latitude.toStringAsFixed(5)}, "
               "Lng: ${_sourceLocation.longitude.toStringAsFixed(5)}",
         ),
@@ -86,7 +86,7 @@ class _MapPageState extends State<MapPage> {
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
         position: _destinationLocation,
         infoWindow: InfoWindow(
-          title: "Destination Location",
+          title: "Source Location",
           snippet: "Lat: ${_destinationLocation.latitude.toStringAsFixed(5)}, "
               "Lng: ${_destinationLocation.longitude.toStringAsFixed(5)}",
         ),
@@ -151,9 +151,12 @@ class _MapPageState extends State<MapPage> {
   void _generatePolylineFromPoints(List<LatLng> coordinates) {
     const polylineId = PolylineId("route");
     final polyline = Polyline(
+      width: 10,
+      color: Colors.blue,
+      visible: true,
+      endCap: Cap.roundCap,
+      startCap: Cap.roundCap,
       polylineId: polylineId,
-      color: Colors.blueAccent,
-      width: 6,
       points: coordinates,
     );
     setState(() {
