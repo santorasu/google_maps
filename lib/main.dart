@@ -3,6 +3,7 @@ import 'package:google_maps/gps_home_screen.dart';
 
 import 'home_screen.dart';
 import 'location_home_screen.dart';
+import 'map_page.dart';
 
 void main() {
   runApp(const GoogleMapsApp());
@@ -15,7 +16,7 @@ class GoogleMapsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      home: MapPage(),
     );
   }
 }
