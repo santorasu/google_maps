@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,12 +13,130 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late final GoogleMapController _mapController;
 
+  LocationData? currentLocation;
+
+  Future<void> _getCurrentLocation() async {
+    // //TODO: Check if the app has permission to access the location
+    // bool isLocationEnable = await _isLocationPermissionEnable();
+    // if (isLocationEnable) {
+    //   //TODO: Check if the GPS service on/off
+    //   bool isGpsServiceEnable = await Location.instance.serviceEnabled();
+    //   if (isGpsServiceEnable) {
+    //     //TODO: Get current location
+    //     Location.instance.changeSettings(accuracy: LocationAccuracy.high);
+    //     LocationData locationData = await Location.instance.getLocation();
+    //     print(locationData);
+    //     currentLocation = locationData;
+    //     setState(() {});
+    //   } else {
+    //     //TODO: if not, then move to gps service settings
+    //     Location.instance.requestService();
+    //   }
+    // } else {
+    //   //TODO: If not then request the permission
+    //   bool isPermissionGranted = await _requestPermission();
+    //   if (isPermissionGranted) {
+    //     _getCurrentLocation();
+    //   }
+    // }
+
+    _onLocationPermissionAndServiceEnable(() async {
+      LocationData locationData = await Location.instance.getLocation();
+      print(locationData);
+      currentLocation = locationData;
+      setState(() {});
+    });
+  }
+
+  Future<void> _listenCurrentLocation() async {
+    // //TODO: Check if the app has permission to access the location
+    // bool isLocationEnable = await _isLocationPermissionEnable();
+    // if (isLocationEnable) {
+    //   //TODO: Check if the GPS service on/off
+    //   bool isGpsServiceEnable = await Location.instance.serviceEnabled();
+    //   if (isGpsServiceEnable) {
+    //     //TODO: Get current location
+    //     Location.instance.changeSettings( accuracy: LocationAccuracy.high, interval: 1000, distanceFilter: 3);
+    //     Location.instance.onLocationChanged.listen((LocationData location){
+    //        print(location);
+    //      });
+    //   } else {
+    //     //TODO: if not, then move to gps service settings
+    //     Location.instance.requestService();
+    //   }
+    // } else {
+    //   //TODO: If not then request the permission
+    //   bool isPermissionGranted = await _requestPermission();
+    //   if (isPermissionGranted) {
+    //     _listenCurrentLocation();
+    //   }
+    // }
+
+    _onLocationPermissionAndServiceEnable(() {
+      Location.instance.changeSettings(
+        accuracy: LocationAccuracy.high,
+        interval: 1000,
+        distanceFilter: 3,
+      );
+      Location.instance.onLocationChanged.listen((LocationData location) {
+        print(location);
+      });
+    });
+  }
+
+  Future<void> _onLocationPermissionAndServiceEnable(
+      VoidCallback onSuccess,
+      ) async {
+    //TODO: Check if the app has permission to access the location
+    bool isLocationEnable = await _isLocationPermissionEnable();
+    if (isLocationEnable) {
+      //TODO: Check if the GPS service on/off
+      bool isGpsServiceEnable = await Location.instance.serviceEnabled();
+      if (isGpsServiceEnable) {
+        //TODO: What user want
+        onSuccess();
+      } else {
+        //TODO: if not, then move to gps service settings
+        Location.instance.requestService();
+      }
+    } else {
+      //TODO: If not then request the permission
+      bool isPermissionGranted = await _requestPermission();
+      if (isPermissionGranted) {
+        _listenCurrentLocation();
+      }
+    }
+  }
+
+  Future<bool> _isLocationPermissionEnable() async {
+    PermissionStatus locationPermission =
+    await Location.instance.hasPermission();
+    if (locationPermission == PermissionStatus.granted ||
+        locationPermission == PermissionStatus.grantedLimited) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> _requestPermission() async {
+    PermissionStatus locationPermission =
+    await Location.instance.requestPermission();
+    if (locationPermission == PermissionStatus.granted ||
+        locationPermission == PermissionStatus.grantedLimited) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Home")),
+      appBar: AppBar(title: const Text("Real Time Location Tracker")),
       body: GoogleMap(
-        mapType: MapType.hybrid,
+        mapType: MapType.terrain,
         initialCameraPosition: const CameraPosition(
           zoom: 17,
           target: LatLng(23.880815840607823, 90.32470045429187),
