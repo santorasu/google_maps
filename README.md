@@ -1,16 +1,17 @@
-# google_maps
+Google Maps + Riverpod (Flutter) — Real-Time Route & Live Location
 
-A new Flutter project.
+A clean, testable Flutter setup that shows your current location, draws a route polyline between two points, and keeps the camera auto-following your position — all wired with Riverpod so the UI stays dumb and reactive.
 
-## Getting Started
+Think of it like this: providers own the side-effects (GPS, Google Maps SDK, polylines), widgets just render state. Easy to reason about, easy to extend.
 
-This project is a starting point for a Flutter application.
+✨ Features
 
-A few resources to get you started if this is your first Flutter project:
+🔵 Live “blue dot”: shows your real-time location
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+🧭 Auto camera follow: camera animates as your position changes
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+🗺️ Route polyline: draws a route between Source ↔ Destination (Google Directions API via flutter_polyline_points)
+
+🧰 Riverpod architecture: FutureProvider, StreamProvider, and StateProvider for clean state flow
+
+🧪 Testable: logic is in providers (simple to mock in unit tests)
